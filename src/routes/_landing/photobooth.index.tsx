@@ -8,55 +8,65 @@ export const Route = createFileRoute("/_landing/photobooth/")({
 });
 
 function RouteComponent() {
-  const MAX_IMAGES = 4;
+  const timer = 1;
+  const maxImages = 1;
 
   const [webcamControl, setWebcamControl] = useState(false);
-  const [countdown, setCountdown] = useState(4);
+  const [countdown, setCountdown] = useState(timer);
   const [isCapturing, setCapturing] = useState(false);
 
   const cameraRef = useRef<Webcam>(null);
   const [image, setImage] = useState<string[]>([]);
 
   const capture = useCallback(() => {
-    if (cameraRef.current && image.length < MAX_IMAGES) {
+    if (cameraRef.current && image.length < maxImages) {
       const shot = cameraRef.current.getScreenshot();
       if (shot) {
-        setImage((prevImage) => [...prevImage, shot]);
+        const images = [...image, shot];
+        setImage(images);
+        sessionStorage.setItem("booth_images", JSON.stringify(images));
 
-        if (image.length + 1 === MAX_IMAGES) {
+        if (image.length + 1 === maxImages) {
           setCapturing(false);
         }
       }
     }
-  }, [image.length]);
+  }, [image, maxImages]);
 
   useEffect(() => {
-    if (isCapturing && image.length < MAX_IMAGES) {
+    if (isCapturing && image.length < maxImages) {
       const interval = setInterval(() => {
         if (countdown > 1) {
           setCountdown((prev) => prev - 1);
         } else {
           capture();
-          setCountdown(4);
+          setCountdown(timer);
         }
       }, 1000);
       return () => clearInterval(interval);
     }
-  }, [isCapturing, capture, countdown, image.length]);
+  }, [isCapturing, capture, countdown, image.length, maxImages]);
 
-  const retake = () => {
-    setImage((prevImage) => prevImage.slice(0, -1));
+  const toggleWebcam = () => setWebcamControl((prev) => !prev);
+  const startBooth = () => setCapturing(true);
+  const retakePictures = () => {
+    setImage((prev) => prev.slice(0, -1));
     setCapturing(true);
   };
-
-  const restart = () => {
+  const restartBooth = () => {
     setImage([]);
+    setCapturing(false);
+    setCountdown(timer);
+  };
+  const clearPictures = () => {
+    setImage([]);
+    sessionStorage.removeItem("booth_images");
   };
 
   return (
     <>
       <Button
-        onClick={() => setWebcamControl(!webcamControl)}
+        onClick={toggleWebcam}
         size="sm"
         className="px-4 py-2 bg-gray-500 text-white rounded-lg"
       >
@@ -79,14 +89,14 @@ function RouteComponent() {
 
           <div className="relative flex justify-between w-full items-center">
             <div className="items-center ml-auto space-x-2">
-              {image.length === MAX_IMAGES && (
-                <Button variant="destructive" onClick={restart}>
+              {image.length === maxImages && (
+                <Button variant="destructive" onClick={restartBooth}>
                   Restart
                 </Button>
               )}
               {!isCapturing && (
                 <Button
-                  onClick={() => setCapturing(true)}
+                  onClick={startBooth}
                   className=" bg-blue-500 text-white rounded-lg"
                 >
                   Start
@@ -94,7 +104,7 @@ function RouteComponent() {
               )}
 
               {isCapturing && image.length > 0 && (
-                <Button onClick={retake}>Retake</Button>
+                <Button onClick={retakePictures}>Retake</Button>
               )}
             </div>
           </div>
@@ -118,7 +128,7 @@ function RouteComponent() {
             ))}
             {image.length > 0 && (
               <div className="self-end">
-                <Button onClick={() => setImage([])}>Clear</Button>
+                <Button onClick={clearPictures}>Clear</Button>
               </div>
             )}
           </div>

@@ -13,7 +13,7 @@ function LandingIndexPageComponent() {
       <div className="flex flex-cols h-screen items-center justify-center">
         <div className="justify-center grid grid-cols-1 space-y-4">
           <div className="text-center">
-            <h1 className="font-bold text-3xl">SAKHALAKHA</h1>
+            <h1 className="font-bold text-3xl">ALLBOOTHNENG</h1>
             <p className="font-bold text-2xl"> PHOTOBOOTH</p>
           </div>
           <Button onClick={() => navigate({ to: "/photobooth" })}>

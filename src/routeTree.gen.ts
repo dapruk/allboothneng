@@ -15,7 +15,7 @@ import { Route as LandingLayoutImport } from './routes/_landing/layout'
 import { Route as AuthLayoutImport } from './routes/_auth/layout'
 import { Route as LandingIndexImport } from './routes/_landing/index'
 import { Route as LandingPhotoboothIndexImport } from './routes/_landing/photobooth.index'
-import { Route as LandingAboutIndexImport } from './routes/_landing/about.index'
+import { Route as LandingEditorIndexImport } from './routes/_landing/editor.index'
 import { Route as AuthResetPasswordIndexImport } from './routes/_auth/reset-password.index'
 import { Route as AuthRegisterIndexImport } from './routes/_auth/register.index'
 import { Route as AuthLoginIndexImport } from './routes/_auth/login.index'
@@ -46,9 +46,9 @@ const LandingPhotoboothIndexRoute = LandingPhotoboothIndexImport.update({
   getParentRoute: () => LandingLayoutRoute,
 } as any)
 
-const LandingAboutIndexRoute = LandingAboutIndexImport.update({
-  id: '/about/',
-  path: '/about/',
+const LandingEditorIndexRoute = LandingEditorIndexImport.update({
+  id: '/editor/',
+  path: '/editor/',
   getParentRoute: () => LandingLayoutRoute,
 } as any)
 
@@ -144,11 +144,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthResetPasswordIndexImport
       parentRoute: typeof AuthLayoutImport
     }
-    '/_landing/about/': {
-      id: '/_landing/about/'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof LandingAboutIndexImport
+    '/_landing/editor/': {
+      id: '/_landing/editor/'
+      path: '/editor'
+      fullPath: '/editor'
+      preLoaderRoute: typeof LandingEditorIndexImport
       parentRoute: typeof LandingLayoutImport
     }
     '/_landing/photobooth/': {
@@ -185,13 +185,13 @@ const AuthLayoutRouteWithChildren = AuthLayoutRoute._addFileChildren(
 
 interface LandingLayoutRouteChildren {
   LandingIndexRoute: typeof LandingIndexRoute
-  LandingAboutIndexRoute: typeof LandingAboutIndexRoute
+  LandingEditorIndexRoute: typeof LandingEditorIndexRoute
   LandingPhotoboothIndexRoute: typeof LandingPhotoboothIndexRoute
 }
 
 const LandingLayoutRouteChildren: LandingLayoutRouteChildren = {
   LandingIndexRoute: LandingIndexRoute,
-  LandingAboutIndexRoute: LandingAboutIndexRoute,
+  LandingEditorIndexRoute: LandingEditorIndexRoute,
   LandingPhotoboothIndexRoute: LandingPhotoboothIndexRoute,
 }
 
@@ -207,7 +207,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof AuthLoginIndexRoute
   '/register': typeof AuthRegisterIndexRoute
   '/reset-password': typeof AuthResetPasswordIndexRoute
-  '/about': typeof LandingAboutIndexRoute
+  '/editor': typeof LandingEditorIndexRoute
   '/photobooth': typeof LandingPhotoboothIndexRoute
 }
 
@@ -219,7 +219,7 @@ export interface FileRoutesByTo {
   '/login': typeof AuthLoginIndexRoute
   '/register': typeof AuthRegisterIndexRoute
   '/reset-password': typeof AuthResetPasswordIndexRoute
-  '/about': typeof LandingAboutIndexRoute
+  '/editor': typeof LandingEditorIndexRoute
   '/photobooth': typeof LandingPhotoboothIndexRoute
 }
 
@@ -233,7 +233,7 @@ export interface FileRoutesById {
   '/_auth/login/': typeof AuthLoginIndexRoute
   '/_auth/register/': typeof AuthRegisterIndexRoute
   '/_auth/reset-password/': typeof AuthResetPasswordIndexRoute
-  '/_landing/about/': typeof LandingAboutIndexRoute
+  '/_landing/editor/': typeof LandingEditorIndexRoute
   '/_landing/photobooth/': typeof LandingPhotoboothIndexRoute
 }
 
@@ -247,7 +247,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/reset-password'
-    | '/about'
+    | '/editor'
     | '/photobooth'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -258,7 +258,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/reset-password'
-    | '/about'
+    | '/editor'
     | '/photobooth'
   id:
     | '__root__'
@@ -270,7 +270,7 @@ export interface FileRouteTypes {
     | '/_auth/login/'
     | '/_auth/register/'
     | '/_auth/reset-password/'
-    | '/_landing/about/'
+    | '/_landing/editor/'
     | '/_landing/photobooth/'
   fileRoutesById: FileRoutesById
 }
@@ -313,7 +313,7 @@ export const routeTree = rootRoute
       "filePath": "_landing/layout.tsx",
       "children": [
         "/_landing/",
-        "/_landing/about/",
+        "/_landing/editor/",
         "/_landing/photobooth/"
       ]
     },
@@ -341,8 +341,8 @@ export const routeTree = rootRoute
       "filePath": "_auth/reset-password.index.tsx",
       "parent": "/_auth"
     },
-    "/_landing/about/": {
-      "filePath": "_landing/about.index.tsx",
+    "/_landing/editor/": {
+      "filePath": "_landing/editor.index.tsx",
       "parent": "/_landing"
     },
     "/_landing/photobooth/": {
