@@ -7,9 +7,9 @@ export default function LandingLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col min-h-screen bg-[#fff0f3]">
+    <div className="h-screen bg-[#fff0f3] flex flex-col overflow-hidden">
       <Navbar />
-      {children}
+      <div className="flex-1 overflow-hidden">{children}</div>
     </div>
   );
 }

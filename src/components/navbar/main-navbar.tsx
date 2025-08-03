@@ -61,38 +61,29 @@ export default function MainNavbar(): JSX.Element {
     });
 
     // CONTINUOUS IDLE
-    // Replace your current CONTINUOUS IDLE section with this fixed playful dancing code:
 
-    // PLAYFUL DANCING LETTERS
     setTimeout(() => {
       letters.forEach((letter: HTMLSpanElement, index: number) => {
-        // Give each letter a playful "personality"
         const letterChar = letter.textContent?.toLowerCase() || "";
         const danceStyle = getDancePersonality(letterChar, index);
 
-        // Start the dance party!
         playfulDance(letter, danceStyle, index);
       });
     }, 2000);
 
-    // Dance personality based on letter character
     function getDancePersonality(char: string, index: number): string {
       const personalities: { [key: string]: string } = {
-        // Bouncy letters
         a: "bouncy",
         e: "bouncy",
 
-        // Wiggly letters
         l: "wiggly",
         s: "wiggly",
         n: "wiggly",
 
-        // Spinning letters
         b: "spinner",
         o: "spinner",
         g: "spinner",
 
-        // Shy letters (subtle movements)
         t: "shy",
         h: "shy",
       };
@@ -111,7 +102,6 @@ export default function MainNavbar(): JSX.Element {
 
       switch (style) {
         case "bouncy": {
-          // Happy bouncing like a rubber ball
           gsap.to(letter, {
             y: "random(-15, -8)",
             duration: "random(0.3, 0.5)",
@@ -122,7 +112,6 @@ export default function MainNavbar(): JSX.Element {
             delay: baseDelay,
           });
 
-          // Add occasional extra big bounce
           gsap.to(letter, {
             scale: "random(1.1, 1.3)",
             duration: 0.2,
@@ -135,19 +124,17 @@ export default function MainNavbar(): JSX.Element {
         }
 
         case "wiggly": {
-          // Silly wiggle dance
           const wiggleTl = gsap.timeline({ repeat: -1, delay: baseDelay });
           wiggleTl
             .to(letter, { rotation: 5, x: 3, duration: 0.15 })
             .to(letter, { rotation: -8, x: -4, duration: 0.2 })
             .to(letter, { rotation: 3, x: 2, duration: 0.15 })
             .to(letter, { rotation: 0, x: 0, duration: 0.25 })
-            .to(letter, {}, `+=${gsap.utils.random(0.5, 2)}`); // random pause
+            .to(letter, {}, `+=${gsap.utils.random(0.5, 2)}`);
           break;
         }
 
         case "spinner": {
-          // Playful spinning with pauses
           gsap.to(letter, {
             rotation: 360,
             duration: "random(1, 2)",
@@ -157,7 +144,6 @@ export default function MainNavbar(): JSX.Element {
             delay: baseDelay,
           });
 
-          // Add bounce during spin
           gsap.to(letter, {
             y: "random(-5, 5)",
             duration: "random(0.8, 1.2)",
@@ -170,7 +156,6 @@ export default function MainNavbar(): JSX.Element {
         }
 
         case "shy": {
-          // Gentle, timid movements
           gsap.to(letter, {
             y: "random(-3, 3)",
             rotation: "random(-1, 1)",
@@ -181,7 +166,6 @@ export default function MainNavbar(): JSX.Element {
             delay: baseDelay,
           });
 
-          // Occasional peek-a-boo
           gsap.to(letter, {
             scale: 0.8,
             duration: 0.3,
@@ -195,7 +179,6 @@ export default function MainNavbar(): JSX.Element {
         }
 
         case "copy_cat": {
-          // Copies the previous letter's movement with delay
           gsap.to(letter, {
             y: "random(-8, 8)",
             rotation: "random(-3, 3)",
@@ -203,17 +186,14 @@ export default function MainNavbar(): JSX.Element {
             ease: "elastic.inOut(1, 0.3)",
             repeat: -1,
             yoyo: true,
-            delay: baseDelay + 0.3, // slight delay to "copy"
+            delay: baseDelay + 0.3,
           });
           break;
         }
 
         default: {
-          // freestyle
-          // Random freestyle dancing
           const freestyleTl = gsap.timeline({ repeat: -1, delay: baseDelay });
 
-          // Create random dance sequence
           const moves = [
             { y: -12, rotation: 10, scale: 1.1, duration: 0.4 },
             { y: 5, rotation: -5, scale: 0.9, duration: 0.3 },
@@ -233,7 +213,6 @@ export default function MainNavbar(): JSX.Element {
         }
       }
 
-      // Add occasional "show off" moments for all letters
       gsap.to(letter, {
         scale: 1.4,
         rotation: "random(-20, 20)",
@@ -247,11 +226,9 @@ export default function MainNavbar(): JSX.Element {
       });
     }
 
-    // Optional: Add a "dance battle" effect where letters sync up occasionally
     setTimeout(() => {
       setInterval(
         () => {
-          // Every 10-15 seconds, make all letters do a synchronized move
           const syncMove = Math.random() > 0.5 ? "group_bounce" : "wave_dance";
 
           if (syncMove === "group_bounce") {
@@ -288,7 +265,7 @@ export default function MainNavbar(): JSX.Element {
           }
         },
         gsap.utils.random(10000, 20000)
-      ); // Random interval 10-20 seconds
+      );
     }, 5000);
 
     // NAVBAR COSMIC DUST
@@ -387,7 +364,6 @@ export default function MainNavbar(): JSX.Element {
 
     drawCosmicDust();
 
-    // Handle resize
     const handleResize = (): void => {
       if (!canvas || !container) return;
       canvas.width = container.offsetWidth;
@@ -405,7 +381,7 @@ export default function MainNavbar(): JSX.Element {
   return (
     <div
       ref={containerRef}
-      className="absolutefont-satisfy z-10 py-6 px-4 bg-white rounded-3xl drop-shadow-lg my-8 container mx-auto text-foreground hidden md:flex justify-center items-center gap-12 relative overflow-hidden"
+      className="font-satisfy z-10 py-6 px-4 bg-white rounded-3xl drop-shadow-lg my-8 container mx-auto text-foreground hidden md:flex justify-center items-center gap-12 relative overflow-hidden"
     >
       <canvas
         ref={canvasRef}

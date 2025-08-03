@@ -66,7 +66,7 @@ function RouteComponent() {
 
   return (
     <>
-      <div className="gap-4 flex flex-col w-full">
+      <div className="gap-4 z-10 flex flex-col w-full">
         <div className="flex justify-center">
           <div className="flex bg-white w-[60%] drop-shadow-lg p-8 justify-center rounded-3xl relative">
             {webcamControl ? (
