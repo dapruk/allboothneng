@@ -12,25 +12,14 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as LandingLayoutImport } from './routes/_landing/layout'
-import { Route as AuthLayoutImport } from './routes/_auth/layout'
 import { Route as LandingIndexImport } from './routes/_landing/index'
 import { Route as LandingPhotoboothIndexImport } from './routes/_landing/photobooth.index'
 import { Route as LandingEditorIndexImport } from './routes/_landing/editor.index'
-import { Route as AuthResetPasswordIndexImport } from './routes/_auth/reset-password.index'
-import { Route as AuthRegisterIndexImport } from './routes/_auth/register.index'
-import { Route as AuthLoginIndexImport } from './routes/_auth/login.index'
-import { Route as AuthForgotPasswordIndexImport } from './routes/_auth/forgot-password.index'
-import { Route as AuthEmailVerificationIndexImport } from './routes/_auth/email-verification.index'
 
 // Create/Update Routes
 
 const LandingLayoutRoute = LandingLayoutImport.update({
   id: '/_landing',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const AuthLayoutRoute = AuthLayoutImport.update({
-  id: '/_auth',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -52,49 +41,10 @@ const LandingEditorIndexRoute = LandingEditorIndexImport.update({
   getParentRoute: () => LandingLayoutRoute,
 } as any)
 
-const AuthResetPasswordIndexRoute = AuthResetPasswordIndexImport.update({
-  id: '/reset-password/',
-  path: '/reset-password/',
-  getParentRoute: () => AuthLayoutRoute,
-} as any)
-
-const AuthRegisterIndexRoute = AuthRegisterIndexImport.update({
-  id: '/register/',
-  path: '/register/',
-  getParentRoute: () => AuthLayoutRoute,
-} as any)
-
-const AuthLoginIndexRoute = AuthLoginIndexImport.update({
-  id: '/login/',
-  path: '/login/',
-  getParentRoute: () => AuthLayoutRoute,
-} as any)
-
-const AuthForgotPasswordIndexRoute = AuthForgotPasswordIndexImport.update({
-  id: '/forgot-password/',
-  path: '/forgot-password/',
-  getParentRoute: () => AuthLayoutRoute,
-} as any)
-
-const AuthEmailVerificationIndexRoute = AuthEmailVerificationIndexImport.update(
-  {
-    id: '/email-verification/',
-    path: '/email-verification/',
-    getParentRoute: () => AuthLayoutRoute,
-  } as any,
-)
-
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/_auth': {
-      id: '/_auth'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof AuthLayoutImport
-      parentRoute: typeof rootRoute
-    }
     '/_landing': {
       id: '/_landing'
       path: ''
@@ -108,41 +58,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof LandingIndexImport
       parentRoute: typeof LandingLayoutImport
-    }
-    '/_auth/email-verification/': {
-      id: '/_auth/email-verification/'
-      path: '/email-verification'
-      fullPath: '/email-verification'
-      preLoaderRoute: typeof AuthEmailVerificationIndexImport
-      parentRoute: typeof AuthLayoutImport
-    }
-    '/_auth/forgot-password/': {
-      id: '/_auth/forgot-password/'
-      path: '/forgot-password'
-      fullPath: '/forgot-password'
-      preLoaderRoute: typeof AuthForgotPasswordIndexImport
-      parentRoute: typeof AuthLayoutImport
-    }
-    '/_auth/login/': {
-      id: '/_auth/login/'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof AuthLoginIndexImport
-      parentRoute: typeof AuthLayoutImport
-    }
-    '/_auth/register/': {
-      id: '/_auth/register/'
-      path: '/register'
-      fullPath: '/register'
-      preLoaderRoute: typeof AuthRegisterIndexImport
-      parentRoute: typeof AuthLayoutImport
-    }
-    '/_auth/reset-password/': {
-      id: '/_auth/reset-password/'
-      path: '/reset-password'
-      fullPath: '/reset-password'
-      preLoaderRoute: typeof AuthResetPasswordIndexImport
-      parentRoute: typeof AuthLayoutImport
     }
     '/_landing/editor/': {
       id: '/_landing/editor/'
@@ -163,26 +78,6 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-interface AuthLayoutRouteChildren {
-  AuthEmailVerificationIndexRoute: typeof AuthEmailVerificationIndexRoute
-  AuthForgotPasswordIndexRoute: typeof AuthForgotPasswordIndexRoute
-  AuthLoginIndexRoute: typeof AuthLoginIndexRoute
-  AuthRegisterIndexRoute: typeof AuthRegisterIndexRoute
-  AuthResetPasswordIndexRoute: typeof AuthResetPasswordIndexRoute
-}
-
-const AuthLayoutRouteChildren: AuthLayoutRouteChildren = {
-  AuthEmailVerificationIndexRoute: AuthEmailVerificationIndexRoute,
-  AuthForgotPasswordIndexRoute: AuthForgotPasswordIndexRoute,
-  AuthLoginIndexRoute: AuthLoginIndexRoute,
-  AuthRegisterIndexRoute: AuthRegisterIndexRoute,
-  AuthResetPasswordIndexRoute: AuthResetPasswordIndexRoute,
-}
-
-const AuthLayoutRouteWithChildren = AuthLayoutRoute._addFileChildren(
-  AuthLayoutRouteChildren,
-)
-
 interface LandingLayoutRouteChildren {
   LandingIndexRoute: typeof LandingIndexRoute
   LandingEditorIndexRoute: typeof LandingEditorIndexRoute
@@ -202,86 +97,43 @@ const LandingLayoutRouteWithChildren = LandingLayoutRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '': typeof LandingLayoutRouteWithChildren
   '/': typeof LandingIndexRoute
-  '/email-verification': typeof AuthEmailVerificationIndexRoute
-  '/forgot-password': typeof AuthForgotPasswordIndexRoute
-  '/login': typeof AuthLoginIndexRoute
-  '/register': typeof AuthRegisterIndexRoute
-  '/reset-password': typeof AuthResetPasswordIndexRoute
   '/editor': typeof LandingEditorIndexRoute
   '/photobooth': typeof LandingPhotoboothIndexRoute
 }
 
 export interface FileRoutesByTo {
-  '': typeof AuthLayoutRouteWithChildren
   '/': typeof LandingIndexRoute
-  '/email-verification': typeof AuthEmailVerificationIndexRoute
-  '/forgot-password': typeof AuthForgotPasswordIndexRoute
-  '/login': typeof AuthLoginIndexRoute
-  '/register': typeof AuthRegisterIndexRoute
-  '/reset-password': typeof AuthResetPasswordIndexRoute
   '/editor': typeof LandingEditorIndexRoute
   '/photobooth': typeof LandingPhotoboothIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/_auth': typeof AuthLayoutRouteWithChildren
   '/_landing': typeof LandingLayoutRouteWithChildren
   '/_landing/': typeof LandingIndexRoute
-  '/_auth/email-verification/': typeof AuthEmailVerificationIndexRoute
-  '/_auth/forgot-password/': typeof AuthForgotPasswordIndexRoute
-  '/_auth/login/': typeof AuthLoginIndexRoute
-  '/_auth/register/': typeof AuthRegisterIndexRoute
-  '/_auth/reset-password/': typeof AuthResetPasswordIndexRoute
   '/_landing/editor/': typeof LandingEditorIndexRoute
   '/_landing/photobooth/': typeof LandingPhotoboothIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | ''
-    | '/'
-    | '/email-verification'
-    | '/forgot-password'
-    | '/login'
-    | '/register'
-    | '/reset-password'
-    | '/editor'
-    | '/photobooth'
+  fullPaths: '' | '/' | '/editor' | '/photobooth'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | ''
-    | '/'
-    | '/email-verification'
-    | '/forgot-password'
-    | '/login'
-    | '/register'
-    | '/reset-password'
-    | '/editor'
-    | '/photobooth'
+  to: '/' | '/editor' | '/photobooth'
   id:
     | '__root__'
-    | '/_auth'
     | '/_landing'
     | '/_landing/'
-    | '/_auth/email-verification/'
-    | '/_auth/forgot-password/'
-    | '/_auth/login/'
-    | '/_auth/register/'
-    | '/_auth/reset-password/'
     | '/_landing/editor/'
     | '/_landing/photobooth/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  AuthLayoutRoute: typeof AuthLayoutRouteWithChildren
   LandingLayoutRoute: typeof LandingLayoutRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  AuthLayoutRoute: AuthLayoutRouteWithChildren,
   LandingLayoutRoute: LandingLayoutRouteWithChildren,
 }
 
@@ -295,18 +147,7 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/_auth",
         "/_landing"
-      ]
-    },
-    "/_auth": {
-      "filePath": "_auth/layout.tsx",
-      "children": [
-        "/_auth/email-verification/",
-        "/_auth/forgot-password/",
-        "/_auth/login/",
-        "/_auth/register/",
-        "/_auth/reset-password/"
       ]
     },
     "/_landing": {
@@ -320,26 +161,6 @@ export const routeTree = rootRoute
     "/_landing/": {
       "filePath": "_landing/index.tsx",
       "parent": "/_landing"
-    },
-    "/_auth/email-verification/": {
-      "filePath": "_auth/email-verification.index.tsx",
-      "parent": "/_auth"
-    },
-    "/_auth/forgot-password/": {
-      "filePath": "_auth/forgot-password.index.tsx",
-      "parent": "/_auth"
-    },
-    "/_auth/login/": {
-      "filePath": "_auth/login.index.tsx",
-      "parent": "/_auth"
-    },
-    "/_auth/register/": {
-      "filePath": "_auth/register.index.tsx",
-      "parent": "/_auth"
-    },
-    "/_auth/reset-password/": {
-      "filePath": "_auth/reset-password.index.tsx",
-      "parent": "/_auth"
     },
     "/_landing/editor/": {
       "filePath": "_landing/editor.index.tsx",
