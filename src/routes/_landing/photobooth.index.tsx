@@ -1,5 +1,6 @@
-import { Button } from "@/components/ui/button";
+import AnimatedButton from "@/components/custom/button";
 import { createFileRoute } from "@tanstack/react-router";
+import { Camera, RefreshCcw, RotateCcw, Trash2, Video } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Webcam from "react-webcam";
 
@@ -8,8 +9,8 @@ export const Route = createFileRoute("/_landing/photobooth/")({
 });
 
 function RouteComponent() {
-  const timer = 1;
-  const maxImages = 1;
+  const timer = 5;
+  const maxImages = 4;
 
   const [webcamControl, setWebcamControl] = useState(false);
   const [countdown, setCountdown] = useState(timer);
@@ -65,71 +66,126 @@ function RouteComponent() {
 
   return (
     <>
-      <Button
-        onClick={toggleWebcam}
-        size="sm"
-        className="px-4 py-2 bg-gray-500 text-white rounded-lg"
-      >
-        {webcamControl ? "Turn Off Webcam" : "Turn On Webcam"}
-      </Button>
-      <div className="grid grid-cols-4">
-        <div className="flex flex-col col-span-3 items-center gap-4 p-4">
-          {webcamControl ? (
-            <Webcam
-              ref={cameraRef}
-              screenshotFormat="image/png"
-              className="w-full h-[500px] rounded-lg border border-gray-300"
-              mirrored={true}
-            />
-          ) : (
-            <div className="flex flex-col border border-black w-full h-[500px]">
-              <h1>Webcam Turned Off</h1>
-            </div>
-          )}
-
-          <div className="relative flex justify-between w-full items-center">
-            <div className="items-center ml-auto space-x-2">
-              {image.length === maxImages && (
-                <Button variant="destructive" onClick={restartBooth}>
-                  Restart
-                </Button>
-              )}
-              {!isCapturing && (
-                <Button
-                  onClick={startBooth}
-                  className=" bg-blue-500 text-white rounded-lg"
-                >
-                  Start
-                </Button>
-              )}
-
-              {isCapturing && image.length > 0 && (
-                <Button onClick={retakePictures}>Retake</Button>
-              )}
-            </div>
+      <div className="gap-4 flex flex-col w-full">
+        <div className="flex justify-center">
+          <div className="flex bg-white w-[60%] drop-shadow-lg p-8 justify-center rounded-3xl relative">
+            {webcamControl ? (
+              <>
+                {isCapturing && (
+                  <div className="absolute inset-0 z-20 flex items-center justify-center">
+                    <h1 className="text-white font-bold text-9xl drop-shadow-lg">
+                      {countdown}
+                    </h1>
+                  </div>
+                )}
+                <div className="absolute bottom-12 z-20 flex w-full justify-center gap-4 h-[10vh]">
+                  {image.map((image, index) => (
+                    <img
+                      className="rounded-3xl border-4 border-white drop-shadow-md"
+                      key={index}
+                      src={image}
+                      alt={`captured ${index + 1}`}
+                    />
+                  ))}
+                </div>
+                <Webcam
+                  className="flex rounded-2xl w-full"
+                  ref={cameraRef}
+                  screenshotFormat="image/png"
+                  mirrored={true}
+                />
+              </>
+            ) : (
+              <div>
+                <h1>Webcam Turned Off</h1>
+              </div>
+            )}
           </div>
-          {isCapturing && (
-            <div className="relative flex justify-center w-full items-center">
-              <h1 className="text-[100px] font-bold">{countdown}</h1>
-            </div>
-          )}
         </div>
 
-        <div className=" h-full w-full flex flex-col">
-          <h1 className="text-center font-bold text-lg">Captured Images</h1>
-          <div className="grid grid-cols-1 justify-center space-y-4">
-            {image.map((image, index) => (
-              <img
-                key={index}
-                src={image}
-                alt={`captured ${index + 1}`}
-                className="w-full h-[180px] object-contain"
-              />
-            ))}
+        <div className="flex justify-center">
+          <div className="flex gap-4 w-[75%] drop-shadow-lg p-8 justify-center rounded-full">
+            {/* {image.length === maxImages && ( */}
+            <AnimatedButton
+              fromColor={{
+                background: "#FFFFFF",
+                text: "#8276a3",
+              }}
+              toColor={{
+                background: "#8276a3",
+                text: "#FFFFFF",
+              }}
+              onClick={restartBooth}
+            >
+              <RotateCcw />
+              <span>Restart</span>
+            </AnimatedButton>
+            {/* )} */}
+            {!isCapturing && (
+              <AnimatedButton
+                fromColor={{
+                  background: "#FFFFFF",
+                  text: "#8276a3",
+                }}
+                toColor={{
+                  background: "#8276a3",
+                  text: "#FFFFFF",
+                }}
+                onClick={startBooth}
+              >
+                <Camera />
+                <span> Start</span>
+              </AnimatedButton>
+            )}
+
+            {/* {isCapturing && image.length > 0 && ( */}
+            <AnimatedButton
+              fromColor={{
+                background: "#FFFFFF",
+                text: "#8276a3",
+              }}
+              toColor={{
+                background: "#8276a3",
+                text: "#FFFFFF",
+              }}
+              onClick={retakePictures}
+            >
+              <RefreshCcw />
+              <span>Retake</span>
+            </AnimatedButton>
+
+            {/* )} */}
+            <AnimatedButton
+              fromColor={{
+                background: "#FFFFFF",
+                text: "#8276a3",
+              }}
+              toColor={{
+                background: "#8276a3",
+                text: "#FFFFFF",
+              }}
+              onClick={toggleWebcam}
+            >
+              <Video />
+              <span>
+                {webcamControl ? "Turn Off Webcam" : "Turn On Webcam"}
+              </span>
+            </AnimatedButton>
             {image.length > 0 && (
-              <div className="self-end">
-                <Button onClick={clearPictures}>Clear</Button>
-              </div>
+              <AnimatedButton
+                fromColor={{
+                  background: "#FFFFFF",
+                  text: "#8276a3",
+                }}
+                toColor={{
+                  background: "#8276a3",
+                  text: "#FFFFFF",
+                }}
+                onClick={clearPictures}
+              >
+                <Trash2 />
+                <span>Clear</span>
+              </AnimatedButton>
             )}
           </div>
         </div>
