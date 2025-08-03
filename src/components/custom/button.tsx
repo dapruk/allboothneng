@@ -35,7 +35,7 @@ const sizeConfig = {
     text: "text-base",
   },
   xl: {
-    padding: "h-14 px-6",
+    padding: "h-16 px-8",
     text: "text-base",
   },
 };

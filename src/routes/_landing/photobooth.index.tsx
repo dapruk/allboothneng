@@ -2,7 +2,7 @@ import AnimatedCountdown from "@/components/custom/animated-countdown";
 import AnimatedButton from "@/components/custom/button";
 import CapturedImage from "@/components/custom/captured-image";
 import { createFileRoute } from "@tanstack/react-router";
-import { Camera, RefreshCcw, RotateCcw, Trash2, Video } from "lucide-react";
+import { Camera, RefreshCcw, RotateCcw, Video } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Webcam from "react-webcam";
 
@@ -11,10 +11,11 @@ export const Route = createFileRoute("/_landing/photobooth/")({
 });
 
 function RouteComponent() {
+  const DEV_MODE = false;
   const timer = 5;
   const maxImages = 4;
 
-  const [webcamControl, setWebcamControl] = useState(false);
+  const [webcamControl, setWebcamControl] = useState(DEV_MODE ? false : true);
   const [countdown, setCountdown] = useState(timer);
   const [isCapturing, setCapturing] = useState(false);
   const [showFlash, setShowFlash] = useState(false);
@@ -65,17 +66,14 @@ function RouteComponent() {
   };
   const restartBooth = () => {
     setImage([]);
+    sessionStorage.removeItem("booth_images");
     setCapturing(false);
     setCountdown(timer);
-  };
-  const clearPictures = () => {
-    setImage([]);
-    sessionStorage.removeItem("booth_images");
   };
 
   return (
     <>
-      <div className="gap-4 z-10 flex flex-col w-full max-h-[100vh]">
+      <div className="gap-4 z-10 flex flex-col w-full min-h-full">
         <div className="flex justify-center">
           <div className="flex bg-white w-[55%] drop-shadow-lg p-8 justify-center rounded-3xl relative">
             {webcamControl ? (
@@ -120,7 +118,7 @@ function RouteComponent() {
           <div className="flex gap-4 w-[75%] drop-shadow-lg p-8 justify-center rounded-full">
             {image.length === maxImages && (
               <AnimatedButton
-                size="lg"
+                size="xl"
                 fromColor={{
                   background: "#FFFFFF",
                   text: "#8276a3",
@@ -135,9 +133,10 @@ function RouteComponent() {
                 <span>Restart</span>
               </AnimatedButton>
             )}
-            {!isCapturing && (
+
+            {!isCapturing && image.length === 0 && (
               <AnimatedButton
-                size="lg"
+                size="xl"
                 fromColor={{
                   background: "#FFFFFF",
                   text: "#8276a3",
@@ -170,24 +169,8 @@ function RouteComponent() {
                 <span>Retake</span>
               </AnimatedButton>
             )}
-            <AnimatedButton
-              size="lg"
-              fromColor={{
-                background: "#FFFFFF",
-                text: "#8276a3",
-              }}
-              toColor={{
-                background: "#8276a3",
-                text: "#FFFFFF",
-              }}
-              onClick={toggleWebcam}
-            >
-              <Video />
-              <span>
-                {webcamControl ? "Turn Off Webcam" : "Turn On Webcam"}
-              </span>
-            </AnimatedButton>
-            {image.length > 0 && (
+
+            {DEV_MODE && (
               <AnimatedButton
                 size="lg"
                 fromColor={{
@@ -198,10 +181,12 @@ function RouteComponent() {
                   background: "#8276a3",
                   text: "#FFFFFF",
                 }}
-                onClick={clearPictures}
+                onClick={toggleWebcam}
               >
-                <Trash2 />
-                <span>Clear</span>
+                <Video />
+                <span>
+                  {webcamControl ? "Turn Off Webcam" : "Turn On Webcam"}
+                </span>
               </AnimatedButton>
             )}
           </div>

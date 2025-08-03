@@ -110,35 +110,38 @@ function LandingIndexPageComponent(): JSX.Element {
   }, []);
 
   return (
-    <div className="flex flex-col h-[100vh]  z-10 items-center justify-center px-4">
-      <div className="justify-center grid grid-cols-1 space-y-4 mb-8">
-        <div
-          ref={titleContainerRef}
-          className="text-center text-[#8276a3] relative"
-          style={{ transformOrigin: "center" }}
-        >
-          <h1
-            ref={titleRef}
-            className="font-satisfy font-bold text-9xl drop-shadow-sm"
-          ></h1>
-          <p ref={subtitleRef} className="font-satisfy text-6xl"></p>
+    <>
+      <div className="flex flex-col h-[100vh]  z-10 items-center justify-center px-4">
+        <div className="justify-center grid grid-cols-1 space-y-4 mb-8">
+          <div
+            ref={titleContainerRef}
+            className="text-center text-[#8276a3] relative"
+            style={{ transformOrigin: "center" }}
+          >
+            <h1
+              ref={titleRef}
+              className="font-satisfy font-bold text-9xl drop-shadow-sm"
+            ></h1>
+            <p ref={subtitleRef} className="font-satisfy text-6xl"></p>
+          </div>
         </div>
+
+        <AnimatedButton
+          size="lg"
+          fromColor={{
+            background: "#FFFFFF",
+            text: "#8276a3",
+          }}
+          toColor={{
+            background: "#8276a3",
+            text: "#FFFFFF",
+          }}
+          onClick={() => navigate({ to: "/photobooth" })}
+        >
+          <Play />
+          <span className="font-bold text-2xl">Start</span>
+        </AnimatedButton>
       </div>
-      <AnimatedButton
-        size="xl"
-        fromColor={{
-          background: "#FFFFFF",
-          text: "#8276a3",
-        }}
-        toColor={{
-          background: "#8276a3",
-          text: "#FFFFFF",
-        }}
-        onClick={() => navigate({ to: "/photobooth" })}
-      >
-        <Play />
-        <span className="font-bold text-2xl">Start</span>
-      </AnimatedButton>
-    </div>
+    </>
   );
 }

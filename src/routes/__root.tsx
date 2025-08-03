@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { MetadataProvider } from "@/providers/metadata-provider";
 
 export const Route = createRootRouteWithContext()({
@@ -15,7 +14,7 @@ function RootComponent() {
     <React.Fragment>
       <MetadataProvider>
         <Outlet />
-        <TanStackRouterDevtools position="bottom-right" />
+        {/* <TanStackRouterDevtools position="bottom-right" /> */}
         {/* <ReactQueryDevtools buttonPosition="bottom-right" /> */}
       </MetadataProvider>
     </React.Fragment>

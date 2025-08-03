@@ -3,6 +3,7 @@ import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { PageChangeAnimation } from "@/components/custom/page-change-animation";
+import SponsorMe from "@/components/custom/sponsor-me";
 
 export const Route = createFileRoute("/_landing")({
   component: LandingLayoutComponent,
@@ -177,6 +178,7 @@ function LandingLayoutComponent() {
       <main className="w-full h-full relative overflow-hidden">
         <PageChangeAnimation>
           <Outlet />
+          <SponsorMe />
         </PageChangeAnimation>
       </main>
     </LandingLayout>
