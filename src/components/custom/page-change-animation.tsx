@@ -1,18 +1,20 @@
 import { useEffect, useRef } from "react";
+import { useLocation } from "@tanstack/react-router";
 import { gsap } from "gsap/gsap-core";
 
-interface PageEntryAnimationProps {
+interface PageChangeAnimationProps {
   children: React.ReactNode;
   duration?: number;
   delay?: number;
 }
 
-export const PageEntryAnimation: React.FC<PageEntryAnimationProps> = ({
+export const PageChangeAnimation: React.FC<PageChangeAnimationProps> = ({
   children,
-  duration = 0.8,
+  duration = 0.6,
   delay = 0,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
 
   useEffect(() => {
     const element = containerRef.current;
@@ -20,7 +22,7 @@ export const PageEntryAnimation: React.FC<PageEntryAnimationProps> = ({
 
     gsap.set(element, {
       opacity: 0,
-      scale: 0.6,
+      scale: 0.95,
     });
 
     gsap.to(element, {
@@ -30,7 +32,7 @@ export const PageEntryAnimation: React.FC<PageEntryAnimationProps> = ({
       delay,
       ease: "power2.out",
     });
-  }, [duration, delay]);
+  }, [location.pathname, duration, delay]);
 
   return (
     <div ref={containerRef} className="relative z-10 w-full h-full">

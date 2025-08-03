@@ -2,7 +2,7 @@ import LandingLayout from "@/components/layout/landing-layout";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { PageEntryAnimation } from "@/components/custom/page-entry-animation";
+import { PageChangeAnimation } from "@/components/custom/page-change-animation";
 
 export const Route = createFileRoute("/_landing")({
   component: LandingLayoutComponent,
@@ -175,9 +175,9 @@ function LandingLayoutComponent() {
   return (
     <LandingLayout>
       <main className="w-full h-full relative overflow-hidden">
-        <PageEntryAnimation>
+        <PageChangeAnimation>
           <Outlet />
-        </PageEntryAnimation>
+        </PageChangeAnimation>
       </main>
     </LandingLayout>
   );

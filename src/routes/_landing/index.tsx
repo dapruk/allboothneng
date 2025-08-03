@@ -110,7 +110,7 @@ function LandingIndexPageComponent(): JSX.Element {
   }, []);
 
   return (
-    <div className="flex flex-col h-[80vh]  z-10 items-center justify-center px-4">
+    <div className="flex flex-col h-[100vh]  z-10 items-center justify-center px-4">
       <div className="justify-center grid grid-cols-1 space-y-4 mb-8">
         <div
           ref={titleContainerRef}
@@ -137,7 +137,7 @@ function LandingIndexPageComponent(): JSX.Element {
         onClick={() => navigate({ to: "/photobooth" })}
       >
         <Play />
-        <span className="font-bold text-2xl">Start Photobooth</span>
+        <span className="font-bold text-2xl">Start</span>
       </AnimatedButton>
     </div>
   );
