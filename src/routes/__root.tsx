@@ -2,11 +2,8 @@ import * as React from "react";
 import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { MetadataProvider } from "@/providers/metadata-provider";
-import { AuthContextType } from "@/providers/auth-provider";
 
-export const Route = createRootRouteWithContext<{
-  auth: AuthContextType;
-}>()({
+export const Route = createRootRouteWithContext()({
   /* beforeLoad: async ({ context }) => {
     await context.auth.client.auth.initialize();
   }, */

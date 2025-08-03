@@ -4,7 +4,6 @@ import {
 } from "@tanstack/react-router";
 import { routeTree } from "@/routeTree.gen";
 import { CustomMetadataProps } from "./metadata-provider";
-import { useAuth } from "./auth-provider";
 
 const router = createRouter({
   routeTree,
@@ -21,13 +20,5 @@ declare module "@tanstack/react-router" {
 }
 
 export default function RouterProvider() {
-  const auth = useAuth();
-
-  return (
-    <RouterProviderBase
-      router={router}
-      defaultPreload="intent"
-      context={{ auth }}
-    />
-  );
+  return <RouterProviderBase router={router} defaultPreload="intent" />;
 }
