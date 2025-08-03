@@ -80,8 +80,8 @@ function LandingIndexPageComponent(): JSX.Element {
               onComplete: () => sparkle.remove(),
             });
           },
-          undefined, // params array
-          index * speed // delay
+          undefined,
+          index * speed
         );
       });
 

@@ -15,6 +15,10 @@ interface AnimatedButtonProps {
   fromColor?: ColorConfig;
   toColor?: ColorConfig;
   onClick?: () => void;
+  appearDelay?: number;
+  appearDuration?: number;
+  disappearDuration?: number;
+  isVisible?: boolean; // Control visibility externally if needed
 }
 
 const sizeConfig = {
@@ -53,16 +57,81 @@ export default function AnimatedButton({
   fromColor = defaultFromColor,
   toColor = defaultToColor,
   onClick,
+  appearDelay = 0,
+  appearDuration = 0.6,
+  disappearDuration = 0.4,
+  isVisible = true,
 }: AnimatedButtonProps) {
   const circleRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const textRef = useRef<HTMLSpanElement>(null);
+  const hasAppeared = useRef(false);
 
+  //ENTRY AND EXIT
+  useEffect(() => {
+    const button = buttonRef.current;
+    const text = textRef.current;
+    if (!button || !text) return;
+
+    if (isVisible && !hasAppeared.current) {
+      gsap.set(button, {
+        scaleX: 0,
+        opacity: 0,
+        transformOrigin: "center center",
+      });
+
+      gsap.set(text, {
+        opacity: 0,
+      });
+
+      const timeline = gsap.timeline({ delay: appearDelay });
+      timeline
+        .to(button, {
+          scaleX: 1,
+          opacity: 1,
+          duration: appearDuration,
+          ease: "power2.out",
+        })
+        .to(
+          text,
+          {
+            opacity: 1,
+            duration: appearDuration * 0.6,
+            ease: "power2.out",
+          },
+          `-=${appearDuration * 0.4}`
+        );
+
+      hasAppeared.current = true;
+    } else if (!isVisible && hasAppeared.current) {
+      const timeline = gsap.timeline();
+      timeline
+        .to(text, {
+          opacity: 0,
+          duration: disappearDuration * 0.3,
+          ease: "power2.in",
+        })
+        .to(
+          button,
+          {
+            scaleX: 0,
+            opacity: 0,
+            duration: disappearDuration,
+            ease: "power2.in",
+            transformOrigin: "center center",
+          },
+          `-=${disappearDuration * 0.1}`
+        );
+
+      hasAppeared.current = false;
+    }
+  }, [isVisible, appearDelay, appearDuration, disappearDuration]);
+
+  //HOVER
   useEffect(() => {
     const circle = circleRef.current;
     const button = buttonRef.current;
     const text = textRef.current;
-
     if (!circle || !button || !text) return;
 
     const buttonRect = button.getBoundingClientRect();
@@ -88,7 +157,6 @@ export default function AnimatedButton({
 
     const handleMouseEnter = () => {
       const timeline = gsap.timeline();
-
       timeline
         .to(circle, {
           scale: 1,
@@ -108,7 +176,6 @@ export default function AnimatedButton({
 
     const handleMouseLeave = () => {
       const timeline = gsap.timeline();
-
       timeline
         .to(text, {
           color: fromColor.text,

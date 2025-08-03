@@ -1,4 +1,6 @@
+import AnimatedCountdown from "@/components/custom/animated-countdown";
 import AnimatedButton from "@/components/custom/button";
+import CapturedImage from "@/components/custom/captured-image";
 import { createFileRoute } from "@tanstack/react-router";
 import { Camera, RefreshCcw, RotateCcw, Trash2, Video } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -15,22 +17,29 @@ function RouteComponent() {
   const [webcamControl, setWebcamControl] = useState(false);
   const [countdown, setCountdown] = useState(timer);
   const [isCapturing, setCapturing] = useState(false);
+  const [showFlash, setShowFlash] = useState(false);
 
   const cameraRef = useRef<Webcam>(null);
   const [image, setImage] = useState<string[]>([]);
 
   const capture = useCallback(() => {
     if (cameraRef.current && image.length < maxImages) {
-      const shot = cameraRef.current.getScreenshot();
-      if (shot) {
-        const images = [...image, shot];
-        setImage(images);
-        sessionStorage.setItem("booth_images", JSON.stringify(images));
+      setShowFlash(true);
 
-        if (image.length + 1 === maxImages) {
-          setCapturing(false);
+      setTimeout(() => {
+        const shot = cameraRef.current?.getScreenshot();
+        if (shot) {
+          const images = [...image, shot];
+          setImage(images);
+          sessionStorage.setItem("booth_images", JSON.stringify(images));
+
+          if (image.length + 1 === maxImages) {
+            setCapturing(false);
+          }
         }
-      }
+
+        setTimeout(() => setShowFlash(false), 100);
+      }, 50);
     }
   }, [image, maxImages]);
 
@@ -66,28 +75,32 @@ function RouteComponent() {
 
   return (
     <>
-      <div className="gap-4 z-10 flex flex-col w-full">
+      <div className="gap-4 z-10 flex flex-col w-full max-h-[100vh]">
         <div className="flex justify-center">
-          <div className="flex bg-white w-[60%] drop-shadow-lg p-8 justify-center rounded-3xl relative">
+          <div className="flex bg-white w-[55%] drop-shadow-lg p-8 justify-center rounded-3xl relative">
             {webcamControl ? (
               <>
+                {showFlash && (
+                  <div className="absolute inset-0 z-30 bg-white rounded-2xl animate-pulse opacity-90" />
+                )}
+
                 {isCapturing && (
                   <div className="absolute inset-0 z-20 flex items-center justify-center">
-                    <h1 className="text-white font-bold text-9xl drop-shadow-lg">
-                      {countdown}
-                    </h1>
+                    <AnimatedCountdown countdown={countdown} />
                   </div>
                 )}
+
                 <div className="absolute bottom-12 z-20 flex w-full justify-center gap-4 h-[10vh]">
                   {image.map((image, index) => (
-                    <img
-                      className="rounded-3xl border-4 border-white drop-shadow-md"
+                    <CapturedImage
                       key={index}
                       src={image}
+                      totalImages={maxImages}
                       alt={`captured ${index + 1}`}
                     />
                   ))}
                 </div>
+
                 <Webcam
                   className="flex rounded-2xl w-full"
                   ref={cameraRef}
@@ -105,24 +118,26 @@ function RouteComponent() {
 
         <div className="flex justify-center">
           <div className="flex gap-4 w-[75%] drop-shadow-lg p-8 justify-center rounded-full">
-            {/* {image.length === maxImages && ( */}
-            <AnimatedButton
-              fromColor={{
-                background: "#FFFFFF",
-                text: "#8276a3",
-              }}
-              toColor={{
-                background: "#8276a3",
-                text: "#FFFFFF",
-              }}
-              onClick={restartBooth}
-            >
-              <RotateCcw />
-              <span>Restart</span>
-            </AnimatedButton>
-            {/* )} */}
+            {image.length === maxImages && (
+              <AnimatedButton
+                size="lg"
+                fromColor={{
+                  background: "#FFFFFF",
+                  text: "#8276a3",
+                }}
+                toColor={{
+                  background: "#8276a3",
+                  text: "#FFFFFF",
+                }}
+                onClick={restartBooth}
+              >
+                <RotateCcw />
+                <span>Restart</span>
+              </AnimatedButton>
+            )}
             {!isCapturing && (
               <AnimatedButton
+                size="lg"
                 fromColor={{
                   background: "#FFFFFF",
                   text: "#8276a3",
@@ -138,24 +153,25 @@ function RouteComponent() {
               </AnimatedButton>
             )}
 
-            {/* {isCapturing && image.length > 0 && ( */}
+            {isCapturing && image.length > 0 && (
+              <AnimatedButton
+                size="lg"
+                fromColor={{
+                  background: "#FFFFFF",
+                  text: "#8276a3",
+                }}
+                toColor={{
+                  background: "#8276a3",
+                  text: "#FFFFFF",
+                }}
+                onClick={retakePictures}
+              >
+                <RefreshCcw />
+                <span>Retake</span>
+              </AnimatedButton>
+            )}
             <AnimatedButton
-              fromColor={{
-                background: "#FFFFFF",
-                text: "#8276a3",
-              }}
-              toColor={{
-                background: "#8276a3",
-                text: "#FFFFFF",
-              }}
-              onClick={retakePictures}
-            >
-              <RefreshCcw />
-              <span>Retake</span>
-            </AnimatedButton>
-
-            {/* )} */}
-            <AnimatedButton
+              size="lg"
               fromColor={{
                 background: "#FFFFFF",
                 text: "#8276a3",
@@ -173,6 +189,7 @@ function RouteComponent() {
             </AnimatedButton>
             {image.length > 0 && (
               <AnimatedButton
+                size="lg"
                 fromColor={{
                   background: "#FFFFFF",
                   text: "#8276a3",
