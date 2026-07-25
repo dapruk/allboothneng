@@ -44,26 +44,27 @@ export function useMetadata() {
 }
 
 const DEFAULT_METADATA: CustomMetadataProps = {
-  title: "My App",
-  description: "A modern web application",
-  keywords: ["web", "app", "react"],
-  author: "Your Name",
+  title: "AllBoothNeng | Online Photobooth",
+  description:
+    "Capture six photos, create your own photobooth strip, and download it in HD.",
+  keywords: ["photobooth", "photo strip", "online photobooth"],
+  author: "AllBoothNeng",
   robots: "index, follow",
   viewport: "width=device-width, initial-scale=1",
-  canonicalUrl: "",
-  themeColor: "#000000",
-  favicon: "/favicon.ico",
-  ogTitle: "My App",
-  ogDescription: "A modern web application",
-  ogImage: "/og-image.png",
+  canonicalUrl: "https://allboothneng.vercel.app/",
+  themeColor: "#fff0f3",
+  favicon: "/favicon.svg",
+  ogTitle: "AllBoothNeng | Online Photobooth",
+  ogDescription:
+    "Capture six photos, create your own photobooth strip, and download it in HD.",
+  ogImage: "https://allboothneng.vercel.app/og-image.png",
   ogType: "website",
-  ogUrl: "",
+  ogUrl: "https://allboothneng.vercel.app/",
   twitterCard: "summary_large_image",
-  twitterTitle: "My App",
-  twitterDescription: "A modern web application",
-  twitterImage: "/twitter-image.png",
-  twitterCreator: "@username",
-  twitterSite: "@username",
+  twitterTitle: "AllBoothNeng | Online Photobooth",
+  twitterDescription:
+    "Capture six photos, create your own photobooth strip, and download it in HD.",
+  twitterImage: "https://allboothneng.vercel.app/og-image.png",
 };
 
 export function MetadataProvider({ children }: { children: React.ReactNode }) {
@@ -75,12 +76,12 @@ export function MetadataProvider({ children }: { children: React.ReactNode }) {
     (metadata: Partial<CustomMetadataProps>) => {
       setDynamicMetadata((prev) => {
         const hasChanges = Object.entries(metadata).some(
-          ([key, value]) => prev[key as keyof CustomMetadataProps] !== value,
+          ([key, value]) => prev[key as keyof CustomMetadataProps] !== value
         );
         return hasChanges ? { ...prev, ...metadata } : prev;
       });
     },
-    [],
+    []
   );
 
   const value = React.useMemo(() => ({ setMetadata }), [setMetadata]);
@@ -166,7 +167,7 @@ export function MetadataManager({
     }
     const hasChanges = Object.entries(metadata).some(
       ([key, value]) =>
-        prevMetadataRef.current?.[key as keyof CustomMetadataProps] !== value,
+        prevMetadataRef.current?.[key as keyof CustomMetadataProps] !== value
     );
     if (hasChanges) {
       prevMetadataRef.current = metadata;
@@ -217,7 +218,7 @@ export function MetadataManager({
 
       return meta;
     },
-    [],
+    []
   );
 
   const updateFavicon = React.useCallback((faviconUrl: string) => {
@@ -276,7 +277,7 @@ export function MetadataManager({
 
     if (isValidUrl(metadata.canonicalUrl)) {
       let link = document.querySelector(
-        'link[rel="canonical"]',
+        'link[rel="canonical"]'
       ) as HTMLLinkElement;
       if (!link) {
         link = document.createElement("link");
@@ -294,7 +295,7 @@ export function MetadataManager({
       setMetaTag(
         "og:image:secure_url",
         metadata.ogImage,
-        "og:image:secure_url",
+        "og:image:secure_url"
       );
     }
     setMetaTag("og:type", metadata.ogType, "og:type");
@@ -327,7 +328,7 @@ export function MetadataManager({
 
   React.useEffect(() => {
     let manifestLink = document.querySelector(
-      'link[rel="manifest"]',
+      'link[rel="manifest"]'
     ) as HTMLLinkElement | null;
     if (!manifestLink) {
       manifestLink = document.createElement("link");
