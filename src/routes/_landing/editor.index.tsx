@@ -97,9 +97,9 @@ function EditorPage() {
   }
 
   return (
-    <div className="h-full overflow-auto px-8 py-10">
-      <div className="mx-auto grid max-w-7xl grid-cols-[260px_360px_320px] items-start justify-center gap-8">
-        <aside className="sticky top-4 rounded-3xl bg-white p-5 shadow-xl">
+    <div className="h-full overflow-hidden px-8 py-4">
+      <div className="mx-auto grid h-full max-w-7xl grid-cols-[260px_minmax(180px,360px)_320px] items-start justify-center gap-8">
+        <aside className="rounded-3xl bg-white p-5 shadow-xl">
           <h1 className="text-2xl font-bold text-[#8276a3]">Your captures</h1>
           <p className="mt-1 text-sm text-slate-500">
             Click one, then click a slot. Or drag it directly.
@@ -137,25 +137,27 @@ function EditorPage() {
           </button>
         </aside>
 
-        <main>
-          <Photostrip
-            captures={captures}
-            slots={slots}
-            editable
-            selectedSlot={selectedSlot}
-            onSelectSlot={selectSlot}
-            onChangeSlot={changeSlot}
-            onDropCapture={placeCapture}
-            onCopySlot={(source, target) => {
-              const sourceSlot = slots[source];
-              if (sourceSlot) setSlot(target, { ...sourceSlot });
-            }}
-          />
+        <main className="flex h-full min-h-0 flex-col items-center">
+          <div className="min-h-0 flex-1 aspect-[1/4]">
+            <Photostrip
+              captures={captures}
+              slots={slots}
+              editable
+              selectedSlot={selectedSlot}
+              onSelectSlot={selectSlot}
+              onChangeSlot={changeSlot}
+              onDropCapture={placeCapture}
+              onCopySlot={(source, target) => {
+                const sourceSlot = slots[source];
+                if (sourceSlot) setSlot(target, { ...sourceSlot });
+              }}
+            />
+          </div>
           <button
             type="button"
             disabled={!complete}
             onClick={() => navigate({ to: "/preview" })}
-            className="mt-6 w-full rounded-full bg-[#8276a3] px-6 py-4 text-xl font-bold text-white shadow-lg disabled:cursor-not-allowed disabled:opacity-40"
+            className="mt-3 w-full flex-none rounded-full bg-[#8276a3] px-6 py-3 text-lg font-bold text-white shadow-lg disabled:cursor-not-allowed disabled:opacity-40"
           >
             Preview photostrip
           </button>
@@ -166,7 +168,7 @@ function EditorPage() {
           )}
         </main>
 
-        <aside className="sticky top-4 rounded-3xl bg-white p-6 shadow-xl">
+        <aside className="rounded-3xl bg-white p-6 shadow-xl">
           <h2 className="text-xl font-bold text-[#8276a3]">Image controls</h2>
           {!selected ? (
             <p className="mt-4 text-slate-500">Select a placed image.</p>

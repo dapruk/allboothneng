@@ -1,5 +1,8 @@
 import Photostrip from "@/components/custom/photostrip";
+import AnimatedButton from "@/components/custom/button";
 import {
+  clearCaptures,
+  EDITOR_STORAGE_KEY,
   loadCaptures,
   loadSlots,
   randomExportName,
@@ -47,6 +50,22 @@ function PreviewPage() {
     }
   };
 
+  const startAgain = async () => {
+    const confirmed = window.confirm(
+      "Start again? This will remove your captures and photostrip edits."
+    );
+    if (!confirmed) return;
+
+    try {
+      await clearCaptures();
+      sessionStorage.removeItem(EDITOR_STORAGE_KEY);
+      navigate({ to: "/photobooth" });
+    } catch (error) {
+      console.error(error);
+      toast.error("Could not clear this photobooth session.");
+    }
+  };
+
   if (!capturesLoaded) {
     return (
       <div className="flex h-full items-center justify-center text-xl font-bold text-[#8276a3]">
@@ -74,33 +93,48 @@ function PreviewPage() {
   }
 
   return (
-    <div className="h-full overflow-auto py-10">
-      <div className="mx-auto w-[360px]">
-        <h1 className="mb-6 text-center font-satisfy text-5xl font-bold text-[#8276a3]">
+    <div className="h-full overflow-hidden py-4">
+      <div className="mx-auto flex h-full min-h-0 flex-col items-center">
+        <h1 className="mb-3 flex-none text-center font-satisfy text-4xl font-bold text-[#8276a3]">
           Your Photostrip
         </h1>
-        <Photostrip captures={captures} slots={slots} />
-        <div className="mt-6 grid grid-cols-2 gap-4">
-          <button
-            type="button"
+        <div className="min-h-0 flex-1 aspect-[1/4]">
+          <Photostrip captures={captures} slots={slots} />
+        </div>
+        <div className="mt-3 grid w-[360px] flex-none grid-cols-2 gap-3">
+          <AnimatedButton
+            size="lg"
+            className="w-full"
+            fromColor={{ background: "#ffffff", text: "#8276a3" }}
+            toColor={{ background: "#8276a3", text: "#ffffff" }}
             onClick={() => navigate({ to: "/editor" })}
-            className="rounded-full border-2 border-[#8276a3] px-4 py-3 font-bold text-[#8276a3]"
           >
             Back to Editor
-          </button>
-          <button
-            type="button"
+          </AnimatedButton>
+          <AnimatedButton
+            size="lg"
+            className="w-full"
+            fromColor={{ background: "#8276a3", text: "#ffffff" }}
+            toColor={{ background: "#ffffff", text: "#8276a3" }}
             disabled={downloading}
             onClick={download}
-            className="flex items-center justify-center gap-2 rounded-full bg-[#8276a3] px-4 py-3 font-bold text-white disabled:opacity-60"
           >
             {downloading ? (
               <LoaderCircle className="animate-spin" />
             ) : (
               <Download />
             )}
-            Download PNG
-          </button>
+            Download
+          </AnimatedButton>
+          <AnimatedButton
+            size="lg"
+            className="col-span-2 w-full"
+            fromColor={{ background: "#ffffff", text: "#dc2626" }}
+            toColor={{ background: "#dc2626", text: "#ffffff" }}
+            onClick={startAgain}
+          >
+            Start Again
+          </AnimatedButton>
         </div>
       </div>
     </div>

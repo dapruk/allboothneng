@@ -193,10 +193,7 @@ export default function Photostrip({
       </div>
 
       <div className="absolute bottom-[2.5%] right-[5%] text-right text-[#8276a3]">
-        <div
-          className="font-satisfy font-bold"
-          style={{ fontSize: "clamp(24px, 6.67cqw, 80px)" }}
-        >
+        <div className="font-satisfy font-bold" style={{ fontSize: "6.67cqw" }}>
           AllBoothNeng
         </div>
       </div>

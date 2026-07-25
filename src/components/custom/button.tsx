@@ -19,6 +19,7 @@ interface AnimatedButtonProps {
   appearDuration?: number;
   disappearDuration?: number;
   isVisible?: boolean; // Control visibility externally if needed
+  disabled?: boolean;
 }
 
 const sizeConfig = {
@@ -61,6 +62,7 @@ export default function AnimatedButton({
   appearDuration = 0.6,
   disappearDuration = 0.4,
   isVisible = true,
+  disabled = false,
 }: AnimatedButtonProps) {
   const circleRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -207,7 +209,8 @@ export default function AnimatedButton({
   return (
     <button
       ref={buttonRef}
-      className={`relative overflow-hidden rounded-full bg-transparent transition-all duration-300 hover:shadow-lg ${config.padding} ${className}`}
+      disabled={disabled}
+      className={`relative overflow-hidden rounded-full bg-transparent transition-all duration-300 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50 ${config.padding} ${className}`}
       style={{
         backgroundColor: fromColor.background,
       }}
