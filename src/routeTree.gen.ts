@@ -13,6 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as LandingLayoutImport } from './routes/_landing/layout'
 import { Route as LandingIndexImport } from './routes/_landing/index'
+import { Route as LandingPreviewIndexImport } from './routes/_landing/preview.index'
 import { Route as LandingPhotoboothIndexImport } from './routes/_landing/photobooth.index'
 import { Route as LandingEditorIndexImport } from './routes/_landing/editor.index'
 
@@ -26,6 +27,12 @@ const LandingLayoutRoute = LandingLayoutImport.update({
 const LandingIndexRoute = LandingIndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => LandingLayoutRoute,
+} as any)
+
+const LandingPreviewIndexRoute = LandingPreviewIndexImport.update({
+  id: '/preview/',
+  path: '/preview/',
   getParentRoute: () => LandingLayoutRoute,
 } as any)
 
@@ -73,6 +80,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LandingPhotoboothIndexImport
       parentRoute: typeof LandingLayoutImport
     }
+    '/_landing/preview/': {
+      id: '/_landing/preview/'
+      path: '/preview'
+      fullPath: '/preview'
+      preLoaderRoute: typeof LandingPreviewIndexImport
+      parentRoute: typeof LandingLayoutImport
+    }
   }
 }
 
@@ -82,12 +96,14 @@ interface LandingLayoutRouteChildren {
   LandingIndexRoute: typeof LandingIndexRoute
   LandingEditorIndexRoute: typeof LandingEditorIndexRoute
   LandingPhotoboothIndexRoute: typeof LandingPhotoboothIndexRoute
+  LandingPreviewIndexRoute: typeof LandingPreviewIndexRoute
 }
 
 const LandingLayoutRouteChildren: LandingLayoutRouteChildren = {
   LandingIndexRoute: LandingIndexRoute,
   LandingEditorIndexRoute: LandingEditorIndexRoute,
   LandingPhotoboothIndexRoute: LandingPhotoboothIndexRoute,
+  LandingPreviewIndexRoute: LandingPreviewIndexRoute,
 }
 
 const LandingLayoutRouteWithChildren = LandingLayoutRoute._addFileChildren(
@@ -99,12 +115,14 @@ export interface FileRoutesByFullPath {
   '/': typeof LandingIndexRoute
   '/editor': typeof LandingEditorIndexRoute
   '/photobooth': typeof LandingPhotoboothIndexRoute
+  '/preview': typeof LandingPreviewIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof LandingIndexRoute
   '/editor': typeof LandingEditorIndexRoute
   '/photobooth': typeof LandingPhotoboothIndexRoute
+  '/preview': typeof LandingPreviewIndexRoute
 }
 
 export interface FileRoutesById {
@@ -113,19 +131,21 @@ export interface FileRoutesById {
   '/_landing/': typeof LandingIndexRoute
   '/_landing/editor/': typeof LandingEditorIndexRoute
   '/_landing/photobooth/': typeof LandingPhotoboothIndexRoute
+  '/_landing/preview/': typeof LandingPreviewIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/' | '/editor' | '/photobooth'
+  fullPaths: '' | '/' | '/editor' | '/photobooth' | '/preview'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/editor' | '/photobooth'
+  to: '/' | '/editor' | '/photobooth' | '/preview'
   id:
     | '__root__'
     | '/_landing'
     | '/_landing/'
     | '/_landing/editor/'
     | '/_landing/photobooth/'
+    | '/_landing/preview/'
   fileRoutesById: FileRoutesById
 }
 
@@ -155,7 +175,8 @@ export const routeTree = rootRoute
       "children": [
         "/_landing/",
         "/_landing/editor/",
-        "/_landing/photobooth/"
+        "/_landing/photobooth/",
+        "/_landing/preview/"
       ]
     },
     "/_landing/": {
@@ -168,6 +189,10 @@ export const routeTree = rootRoute
     },
     "/_landing/photobooth/": {
       "filePath": "_landing/photobooth.index.tsx",
+      "parent": "/_landing"
+    },
+    "/_landing/preview/": {
+      "filePath": "_landing/preview.index.tsx",
       "parent": "/_landing"
     }
   }
