@@ -171,7 +171,7 @@ function RouteComponent() {
                 </AnimatedButton>
               )}
 
-              {image.length === maxImages && (
+              {!isCapturing && image.length > 0 && (
                 <AnimatedButton
                   size="xl"
                   fromColor={{
@@ -189,7 +189,7 @@ function RouteComponent() {
                 </AnimatedButton>
               )}
 
-              {!isCapturing && image.length === 0 && (
+              {!isCapturing && image.length < maxImages && (
                 <AnimatedButton
                   size="xl"
                   fromColor={{
@@ -203,7 +203,7 @@ function RouteComponent() {
                   onClick={startBooth}
                 >
                   <Camera />
-                  <span> Start</span>
+                  <span>{image.length === 0 ? "Start" : "Resume"}</span>
                 </AnimatedButton>
               )}
 
