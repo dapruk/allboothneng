@@ -2,6 +2,11 @@ export const CAPTURE_STORAGE_KEY = "booth_images";
 export const EDITOR_STORAGE_KEY = "booth_editor";
 export const REQUIRED_CAPTURES = 6;
 export const STRIP_SLOT_COUNT = 4;
+export const STRIP_WIDTH = 1200;
+export const STRIP_HEIGHT = 4800;
+export const STRIP_SLOT_SIZE = 1080;
+export const STRIP_SLOT_GAP = 36;
+export const STRIP_PADDING = 60;
 const CAPTURE_DB_NAME = "allboothneng";
 const CAPTURE_STORE_NAME = "captures";
 const CAPTURE_RECORD_KEY = "current";
@@ -134,4 +139,84 @@ export function randomExportName() {
     (value) => "abcdefghijklmnopqrstuvwxyz0123456789"[value % 36]
   ).join("");
   return `allboothneng-${suffix}.png`;
+}
+
+function loadImage(source: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => resolve(image);
+    image.onerror = () => reject(new Error("Could not load captured image"));
+    image.src = source;
+  });
+}
+
+export async function renderPhotostripPng(
+  captures: string[],
+  slots: PhotostripSlots
+): Promise<Blob> {
+  const canvas = document.createElement("canvas");
+  canvas.width = STRIP_WIDTH;
+  canvas.height = STRIP_HEIGHT;
+
+  const context = canvas.getContext("2d");
+  if (!context) throw new Error("Canvas is unavailable");
+
+  context.fillStyle = "#ffffff";
+  context.fillRect(0, 0, STRIP_WIDTH, STRIP_HEIGHT);
+
+  const images = await Promise.all(
+    slots.map((slot) =>
+      slot ? loadImage(captures[slot.captureIndex]) : Promise.resolve(null)
+    )
+  );
+
+  slots.forEach((slot, index) => {
+    const image = images[index];
+    if (!slot || !image) return;
+
+    const slotX = STRIP_PADDING;
+    const slotY = STRIP_PADDING + index * (STRIP_SLOT_SIZE + STRIP_SLOT_GAP);
+    const coverScale = Math.max(
+      STRIP_SLOT_SIZE / image.naturalWidth,
+      STRIP_SLOT_SIZE / image.naturalHeight
+    );
+    const imageWidth = image.naturalWidth * coverScale;
+    const imageHeight = image.naturalHeight * coverScale;
+
+    context.save();
+    context.beginPath();
+    context.rect(slotX, slotY, STRIP_SLOT_SIZE, STRIP_SLOT_SIZE);
+    context.clip();
+    context.translate(
+      slotX + STRIP_SLOT_SIZE / 2 + (slot.x / 100) * STRIP_SLOT_SIZE,
+      slotY + STRIP_SLOT_SIZE / 2 + (slot.y / 100) * STRIP_SLOT_SIZE
+    );
+    context.rotate((slot.rotation * Math.PI) / 180);
+    context.scale(slot.zoom, slot.zoom);
+    context.drawImage(
+      image,
+      -imageWidth / 2,
+      -imageHeight / 2,
+      imageWidth,
+      imageHeight
+    );
+    context.restore();
+  });
+
+  await document.fonts.load("80px Satisfy");
+  context.fillStyle = "#8276a3";
+  context.font = "700 80px Satisfy, cursive";
+  context.textAlign = "right";
+  context.textBaseline = "bottom";
+  context.fillText("AllBoothNeng", 1140, 4680);
+
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(
+      (blob) =>
+        blob
+          ? resolve(blob)
+          : reject(new Error("PNG rendering returned no data")),
+      "image/png"
+    );
+  });
 }

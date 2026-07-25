@@ -102,7 +102,7 @@ export default function Photostrip({
       ref={stripRef}
       data-photostrip
       className="relative w-full overflow-hidden bg-white shadow-2xl"
-      style={{ aspectRatio: "1 / 4" }}
+      style={{ aspectRatio: "1 / 4", containerType: "inline-size" }}
     >
       <div className="absolute inset-0">
         {slots.map((slot, index) => (
@@ -193,7 +193,10 @@ export default function Photostrip({
       </div>
 
       <div className="absolute bottom-[2.5%] right-[5%] text-right text-[#8276a3]">
-        <div className="font-satisfy text-[clamp(1.5rem,5vw,4rem)] font-bold">
+        <div
+          className="font-satisfy font-bold"
+          style={{ fontSize: "clamp(24px, 6.67cqw, 80px)" }}
+        >
           AllBoothNeng
         </div>
       </div>

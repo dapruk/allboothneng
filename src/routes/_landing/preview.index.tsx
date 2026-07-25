@@ -1,9 +1,13 @@
 import Photostrip from "@/components/custom/photostrip";
-import { loadCaptures, loadSlots, randomExportName } from "@/lib/photostrip";
+import {
+  loadCaptures,
+  loadSlots,
+  randomExportName,
+  renderPhotostripPng,
+} from "@/lib/photostrip";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import html2canvas from "html2canvas";
 import { Download, LoaderCircle } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_landing/preview/")({
@@ -16,7 +20,6 @@ function PreviewPage() {
   const [capturesLoaded, setCapturesLoaded] = useState(false);
   const [slots] = useState(loadSlots);
   const [downloading, setDownloading] = useState(false);
-  const exportRef = useRef<HTMLDivElement>(null);
   const complete = slots.every(Boolean) && captures.length >= 6;
 
   useEffect(() => {
@@ -26,20 +29,10 @@ function PreviewPage() {
   }, []);
 
   const download = async () => {
-    if (!exportRef.current || !complete) return;
+    if (!complete) return;
     setDownloading(true);
     try {
-      const canvas = await html2canvas(exportRef.current, {
-        backgroundColor: "#ffffff",
-        scale: 1,
-        useCORS: true,
-        logging: false,
-      });
-      const blob = await new Promise<Blob | null>((resolve) =>
-        canvas.toBlob(resolve, "image/png")
-      );
-      if (!blob) throw new Error("PNG rendering returned no data");
-
+      const blob = await renderPhotostripPng(captures, slots);
       const url = URL.createObjectURL(blob);
       const anchor = document.createElement("a");
       anchor.href = url;
@@ -109,15 +102,6 @@ function PreviewPage() {
             Download PNG
           </button>
         </div>
-      </div>
-
-      <div
-        ref={exportRef}
-        aria-hidden
-        className="fixed -left-[10000px] top-0"
-        style={{ width: 1200, height: 4800 }}
-      >
-        <Photostrip captures={captures} slots={slots} />
       </div>
     </div>
   );
